@@ -1,4 +1,4 @@
-const dbFilePath = "./dbfile/sqlite.db";
+const dbFilePath = "./sqlite.db";
 const fs = require("fs");
 const sqlite3 = require("sqlite3").verbose();
 const SQL = require('./query.js');
