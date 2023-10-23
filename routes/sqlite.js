@@ -1,3 +1,6 @@
+                                                                                                                                                                                                                                              const fs = require("fs");
+const dbFilePath = "./sqlite.db";
+
 const express = require('express');
 const router = express.Router();
 const db = require("../dbconn");
@@ -9,6 +12,26 @@ const QUERY = require('../query.js');
 // all(): Querying all rows
 // get(): Query the first row in the result set
 // each(): Query rows with each
+
+router.get('/main', (req, res) => {
+  console.log('/main');
+  res.redirect('/')
+
+});
+
+
+router.get('/init', (req, res) => {
+  console.log('/init');
+
+  if (fs.existsSync(dbFilePath)) {
+    db.trunTable();
+  }
+
+  res.json({
+    success: 'init',
+  });  
+});
+
 
 router.get('/insert', (req, res) => {
   console.log('/insert');
@@ -26,12 +49,16 @@ router.get('/select', (req, res) => {
   console.log('/select');
 
   selectAllRows();
-  selectFirstRow();
-  selectEachRows();
+  // selectFirstRow();
+  // selectEachRows();
 
-  res.json({
-    success: 'selected',
-  });
+  // res.json({
+  //   success: 'selected',
+  // });
+
+  console.log(`__dirname ${__dirname}`);
+  // res.render("/sqlite/main", res);
+  res.redirect("/sqlite/main");
 
 });
 
@@ -48,7 +75,7 @@ router.get('/delete', (req, res) => {
 });
 
 function deleteRow() {
-  db.run(
+  db.conn().run(
     QUERY.delete,
     (err) => {
       if (err) {
@@ -60,10 +87,10 @@ function deleteRow() {
 }
 
 function insertRow() {
-  const [name, color, weight] = ['sammy','blue',1];
-  db.run(
+  const [name, age] = ['sammy', 1];
+  db.conn().run(
     QUERY.insert,
-    [name, color, weight],
+    [name, age],
     (err) => {
       if (err) {
         console.error(err.message);
@@ -74,19 +101,24 @@ function insertRow() {
 }
 
 function selectAllRows() {
-  db.all(QUERY.select, [], (err, rows) => {
+  db.conn().all(QUERY.select, [], (err, rows) => {
     if (err) {
       throw new Error(err.message);
     }
-    rows.forEach((row) => {
-      console.log(row);
-    });
+    if( rows.length == 0 ) {
+      console.log(`empty`);
+    }
+    else {
+      rows.forEach((row) => {
+        console.log(`${row.name}: ${row.age}`);
+      });
+    }
   });
 }
 
 function selectFirstRow() {
   // first row only
-  db.get(QUERY.select, [], (err, row) => {
+  db.conn().get(QUERY.select, [], (err, row) => {
     if (err) {
       return console.error(err.message);
     }
@@ -97,7 +129,7 @@ function selectFirstRow() {
 }
 
 function selectEachRows() {
-  db.each(QUERY.select, (err, row) => {
+  db.conn().each(QUERY.select, (err, row) => {
     if (err) {
       throw new Error(err.message);
     }

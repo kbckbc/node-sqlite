@@ -1,22 +1,27 @@
 const QUERY = {
   createTable: `
-    CREATE TABLE sharks
+    CREATE TABLE student
     (
-      ID INTEGER PRIMARY KEY AUTOINCREMENT,
-      name   VARCHAR(50) NOT NULL,
-      color   VARCHAR(50) NOT NULL,
-      weight INTEGER NOT NULL
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name  VARCHAR(50) NOT NULL,
+      age   INTEGER
     );
   `,
+  dropTable: `
+    DROP TABLE student;
+  `,
+  trunTable: `
+  TRUNCATE TABLE student;
+  `,  
   insert: `
-    INSERT INTO sharks (name, color, weight) VALUES (?, ?, ?);
+    INSERT INTO student (name, age) VALUES (?, ?);
   `,
   select:`
-    SELECT * FROM sharks;
+    SELECT * FROM student;
   `,
   delete:`
-    DELETE FROM sharks WHERE id = (SELECT max(id) from sharks);
-  `
+    DELETE FROM student WHERE id = (SELECT max(id) from student);
+  `  
 };
 
 module.exports = QUERY;
