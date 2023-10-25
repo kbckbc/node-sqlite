@@ -3,8 +3,10 @@ const dbFilePath = "./sqlite.db";
 
 const express = require('express');
 const router = express.Router();
-const db = require("../dbconn");
+const db = require("../lib/dbconn");
 const QUERY = require('../query.js');
+const path = require('path');
+
 
 
 // sqlite select function
@@ -36,45 +38,23 @@ router.get('/init', (req, res) => {
 router.get('/insert', (req, res) => {
   console.log('/insert');
 
-  insertRow();
-  selectAllRows();
-
-  res.json({
-    success: 'inserted',
-  });  
+  insertRow(res);
 });
 
 
 router.get('/select', (req, res) => {
   console.log('/select');
 
-  selectAllRows();
-  // selectFirstRow();
-  // selectEachRows();
-
-  // res.json({
-  //   success: 'selected',
-  // });
-
-  console.log(`__dirname ${__dirname}`);
-  // res.render("/sqlite/main", res);
-  res.redirect("/sqlite/main");
-
+  selectAllRows(res);
 });
 
 router.get('/delete', (req, res) => {
   console.log('/delete');
 
-  deleteRow();
-  selectAllRows();  
-
-  res.json({
-    success: 'deleted',
-  });
-
+  deleteRow(res);
 });
 
-function deleteRow() {
+function deleteRow(res) {
   db.conn().run(
     QUERY.delete,
     (err) => {
@@ -82,11 +62,13 @@ function deleteRow() {
         console.error(err.message);
       }
       console.log(`deleted a last row`);
+
+      selectAllRows(res);
     }
   );
 }
 
-function insertRow() {
+function insertRow(res) {
   const [name, age] = ['sammy', 1];
   db.conn().run(
     QUERY.insert,
@@ -96,15 +78,18 @@ function insertRow() {
         console.error(err.message);
       }
       console.log(`Inserted a row with the ID: ${this.lastID}`);
+
+      selectAllRows(res);
     }
   );
 }
 
-function selectAllRows() {
+function selectAllRows(res) {
   db.conn().all(QUERY.select, [], (err, rows) => {
     if (err) {
       throw new Error(err.message);
     }
+    console.log(`rows ${rows}`)
     if( rows.length == 0 ) {
       console.log(`empty`);
     }
@@ -113,6 +98,8 @@ function selectAllRows() {
         console.log(`${row.name}: ${row.age}`);
       });
     }
+
+    res.render('sqlite',{data:rows});
   });
 }
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>A Simple Sqlite example </h2>
+
+<a href="/sqlite/insert">insert</a>
+<a href="/sqlite/select">select</a>
+<a href="/sqlite/delete">delete</a>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</tg>
+    </tr>
+    <% for(var i=0; i < data.length; i++) { %>
+        <tr>
+          <td><%= data[i].id %></td>
+          <td><%= data[i].name %></td>
+          <td><%= data[i].age %></td>
+        </tr>
+    <% } %>   
+</table>
+
+</body>
+</html> 
