@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
     // the root directory. 
     // We can pass multiple properties and values 
     // as an object, here we are passing the only name 
-    res.render('sqlite', {data:{}}); 
+    res.render('sqlite', {data:[]}); 
 }); 
 
 // start the app

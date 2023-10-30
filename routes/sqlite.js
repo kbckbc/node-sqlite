@@ -16,7 +16,7 @@ router.get('/main', (req, res) => {
 
 router.get('/init', (req, res) => {
   console.log('/init');
-
+  
   initTable(res);
 });
 
@@ -51,9 +51,10 @@ router.get('/delete', (req, res) => {
 });
 
 function initTable(res) {
-  db.conn().exec(QUERY.dropTable);
-  db.conn().exec(QUERY.createTable);
-  selectAllRows(res);
+  db.close().then((para) => {
+    console.log('yay:', para);
+    selectAllRows(res); 
+  });  
 }
 
 function insertRow(res) {
@@ -87,7 +88,7 @@ function selectAllRows(res) {
       });
     }
 
-    console.log(`rows ${rows}`, JSON.stringify(rows));
+    console.log(`rows [${rows}]`, JSON.stringify(rows));
 
     res.render('sqlite',{data:rows});
   });
