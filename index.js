@@ -12,8 +12,9 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // route 설정
+// 이건 하는 이유가 url 에 /sqlite 하단의 컨트롤은 /routes/sqlite 에서 한다는걸 선언하는것임
+// 굳이 이렇게 안해도 되지만 파일별로 해당 url 을 처리할수 있어서 깔끔하다
 app.use('/sqlite', require('./routes/sqlite'));
-
 
 app.get('/', (req, res) => { 
   

@@ -1,13 +1,10 @@
-                                                                                                                                                                                                                                              const fs = require("fs");
 const dbFilePath = "./sqlite.db";
 
 const express = require('express');
 const router = express.Router();
 const db = require("../lib/dbconn");
+const tools = require("../lib/tools");
 const QUERY = require('../query.js');
-const path = require('path');
-
-
 
 // sqlite select function
 // all, get, each
@@ -16,14 +13,14 @@ const path = require('path');
 // each(): Query rows with each
 
 router.get('/main', (req, res) => {
-  console.log('/main');
+  tools.log('/main');
   res.redirect('/')
 
 });
 
 
 router.get('/init', (req, res) => {
-  console.log('/init');
+  tools.log('/init');
 
   if (fs.existsSync(dbFilePath)) {
     db.trunTable();
@@ -36,20 +33,20 @@ router.get('/init', (req, res) => {
 
 
 router.get('/insert', (req, res) => {
-  console.log('/insert');
+  tools.log('/insert');
 
   insertRow(res);
 });
 
 
 router.get('/select', (req, res) => {
-  console.log('/select');
+  tools.log('/select');
 
   selectAllRows(res);
 });
 
 router.get('/delete', (req, res) => {
-  console.log('/delete');
+  tools.log('/delete');
 
   deleteRow(res);
 });
@@ -59,9 +56,9 @@ function deleteRow(res) {
     QUERY.delete,
     (err) => {
       if (err) {
-        console.error(err.message);
+        tools.log(err.message);
       }
-      console.log(`deleted a last row`);
+      tools.log(`deleted a last row`);
 
       selectAllRows(res);
     }
@@ -75,9 +72,9 @@ function insertRow(res) {
     [name, age],
     (err) => {
       if (err) {
-        console.error(err.message);
+        tools.error(err.message);
       }
-      console.log(`Inserted a row with the ID: ${this.lastID}`);
+      tools.log(`Inserted a row with the ID: ${this.lastID}`);
 
       selectAllRows(res);
     }
@@ -89,13 +86,13 @@ function selectAllRows(res) {
     if (err) {
       throw new Error(err.message);
     }
-    console.log(`rows ${rows}`)
+    tools.log(`rows ${rows}`)
     if( rows.length == 0 ) {
-      console.log(`empty`);
+      tools.log(`empty`);
     }
     else {
       rows.forEach((row) => {
-        console.log(`${row.name}: ${row.age}`);
+        tools.log(`${row.name}: ${row.age}`);
       });
     }
 
@@ -107,11 +104,11 @@ function selectFirstRow() {
   // first row only
   db.conn().get(QUERY.select, [], (err, row) => {
     if (err) {
-      return console.error(err.message);
+      return tools.log(err.message);
     }
     return row
-    ? console.log(row)
-    : console.log(`No result`);
+    ? tools.log(row)
+    : tools.log(`No result`);
   });
 }
 
@@ -120,7 +117,7 @@ function selectEachRows() {
     if (err) {
       throw new Error(err.message);
     }
-    console.log(row);
+    tools.log(row);
   });
 }
 
