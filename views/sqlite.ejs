@@ -4,8 +4,11 @@
 
 <h2>A Simple Sqlite example </h2>
 
+<a href="/sqlite/main">home</a>
+<a href="/sqlite/init">init</a>
 <a href="/sqlite/insert">insert</a>
-<a href="/sqlite/select">select</a>
+<a href="/sqlite/selectall">select all</a>
+<a href="/sqlite/selectfirst">select first</a>
 <a href="/sqlite/delete">delete</a>
 
 <table>
@@ -14,7 +17,8 @@
         <th>Name</th>
         <th>Age</tg>
     </tr>
-    <% for(var i=0; i < data.length; i++) { %>
+    <% console.log(`data:${data}`);
+    for(var i=0; i < data.length; i++) { %>
         <tr>
           <td><%= data[i].id %></td>
           <td><%= data[i].name %></td>
