@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const db = require("../lib/dbconn");
 const QUERY = require('../lib/dbquery.js');
-const path = require('path');
+const tools = require("../lib/tools");
 
 // sqlite select function
 router.get('/main', (req, res) => {
